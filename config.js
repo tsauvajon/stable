@@ -11,19 +11,32 @@ config = {
     // When running Ghost in the wild, use the production environment.
     // Configure your URL and mail settings here
     production: {
-        url: 'http://my-ghost-blog.com',
+        url: 'https://dry-woodland-61230.herokuapp.com/',
         mail: {},
         database: {
-            client: 'sqlite3',
+            client: 'postgres',
             connection: {
-                filename: path.join(__dirname, '/content/data/ghost.db')
+              host: process.env.POSTGRES_HOST,
+              user: process.env.POSTGRES_USER,
+              password: process.env.POSTGRES_PASSWORD,
+              database: process.env.POSTGRES_DATABASE,
+              port: '5432'
             },
             debug: false
         },
-
+        storage: {
+          active: 'ghost-s3',
+          'ghost-s3': {
+              accessKeyId: process.env.GHOST_S3_ACCESSID,
+              secretAccessKey: process.env.GHOST_S3_SECRET,
+              bucket: 'sauvaj-site',
+              region: 'Frankfurt',
+              assetHost: 'https://sauvaj-site.s3-website.eu-central-1.amazonaws.com'
+          }
+        },
         server: {
-            host: '127.0.0.1',
-            port: '2368'
+            host: '0.0.0.0',
+            port: process.env.PORT
         }
     },
 
